@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>インターネット接続状態の監視</title>
+  <meta charset="UTF-8">
+</head>
+<body>
+  <h1>インターネット接続状態の監視</h1>
+  <p id="status">接続状態: </p>
+
+  <script>
+    let targetURL = window.location.href; // 現在のページのURLを使用
+
+    const checkInterval = 5000; // ミリ秒単位の間隔（ここでは5秒）
+    let lastOnlineState = false;
+
+    function checkConnection() {
+      const statusElement = document.getElementById('status');
+
+      fetch(targetURL, { method: 'HEAD', cache: 'no-cache' })
+        .then(response => {
+          const isOnline = response.ok;
+
+          if (isOnline !== lastOnlineState) {
+            if (isOnline) {
+              statusElement.textContent = '接続状態: オンライン';
+              alert('オンラインになりました');
+            } else {
+              statusElement.textContent = '接続状態: オフライン';
+              alert('オフラインになりました');
+            }
+
+            lastOnlineState = isOnline;
+          }
+        })
+        .catch(error => {
+          if (lastOnlineState) {
+            statusElement.textContent = '接続状態: オフライン';
+            alert('オフラインになりました');
+            lastOnlineState = false;
+          }
+        });
+    }
+
+    // 一定間隔ごとに接続状態をチェック
+    setInterval(checkConnection, checkInterval);
+
+    // 初期状態での接続状態をチェック
+    checkConnection();
+  </script>
+</body>
+</html>
