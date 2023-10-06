@@ -6,13 +6,13 @@
 </head>
 <body>
   <h1>インターネット接続状態の監視</h1>
-  <p id="status">接続状態: </p>
+  <p id="status">接続状態: オンライン</p>
 
   <script>
     let targetURL = window.location.href; // 現在のページのURLを使用
 
     const checkInterval = 5000; // ミリ秒単位の間隔（ここでは5秒）
-    let lastOnlineState = false;
+    let lastOnlineState = true; // 最初はオンラインとして初期化
 
     function checkConnection() {
       const statusElement = document.getElementById('status');
@@ -24,7 +24,9 @@
           if (isOnline !== lastOnlineState) {
             if (isOnline) {
               statusElement.textContent = '接続状態: オンライン';
-              alert('オンラインになりました');
+              if (!lastOnlineState) {
+                alert('オンラインになりました');
+              }
             } else {
               statusElement.textContent = '接続状態: オフライン';
               alert('オフラインになりました');
